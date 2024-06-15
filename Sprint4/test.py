@@ -57,25 +57,6 @@ def test_set_book_genre_positive(book_name, genre):
 
 
 @pytest.mark.parametrize('book_name, genre', [
-    ("", "")
-])
-def test_set_book_genre_negative(book_name, genre):
-    # создаем экземпляр (объект) класса BooksCollector
-    collector = BooksCollector()
-
-    try:
-        # добавляем книгу
-        collector.add_new_book(book_name)
-        # добавляем жанр книги
-        collector.set_book_genre(book_name, genre)
-        # проверяем, что книга присутствует в словаре books_genre
-        assert book_name, genre in collector.books_genre
-    except AssertionError:
-        # Сообщение выводится в случае появления ошибки AssertionError
-        print(f'Houston, we have a problem.Value {book_name, genre} do not puts in the list')
-
-
-@pytest.mark.parametrize('book_name, genre', [
     ('Lucky Jim', 'Комедии'),
     ('The Lord of the Rings', 'Фантастика'),
     ('It', 'Ужасы')
@@ -93,6 +74,21 @@ def test_get_books_with_specific_genre_positive(book_name, genre):
     genre_books = collector.get_books_with_specific_genre(genre)
     # проверяем, что название книги содержится в genre_books
     assert book_name in genre_books
+
+
+@pytest.mark.parametrize('book_name, genre', [
+    ("", "")
+])
+def test_set_book_genre_negative(book_name, genre):
+    # создаем экземпляр (объект) класса BooksCollector
+    collector = BooksCollector()
+
+    # добавляем книгу
+    collector.add_new_book(book_name)
+    # добавляем жанр книги
+    collector.set_book_genre(book_name, genre)
+    # проверяем, что книга c пустым названием и жанром не добавилась в словарь books_genre
+    assert len(collector.books_genre) == 0
 
 
 @pytest.mark.parametrize('book_name, genre', [
@@ -186,10 +182,6 @@ def test_delete_book_from_favorites(book_name, genre):
     # создаем экземпляр (объект) класса BooksCollector
     collector = BooksCollector()
 
-    # добавляем книгу
-    collector.add_new_book(book_name)
-    # добавляем жанр книги
-    collector.set_book_genre(book_name, genre)
     # добавляем книгу в список favorites
     collector.add_book_in_favorites(book_name)
     # удаляем книгу из списка favorites
@@ -225,13 +217,44 @@ def test_add_book_twice(book_name):
     # создаем экземпляр (объект) класса BooksCollector
     collector = BooksCollector()
 
-    # добавляем книгу
+    # добавляем книги два раза
     collector.add_new_book(book_name)
-    try:
-        # добавляем книгу
-        collector.add_new_book(book_name)
-    # ожидаем ошибку ValueError, выводим сообщение об ошибке
-    except ValueError:
-        print(f'Houston, we have a problem. Value {book_name} added two times')
+    collector.add_new_book(book_name)
     # проверяем, что в список books_genre добавилось только одно значение
     assert len(collector.books_genre) == 1
+
+
+@pytest.mark.parametrize('book_name, genre', [
+    ('Lucky Jim', 'Комедии'),
+    ('The Lord of the Rings', 'Фантастика'),
+    ('Prostokvashino', 'Мультфильмы')
+])
+def test_get_book_genre(book_name, genre):
+    # создаем экземпляр (объект) класса BooksCollector
+    collector = BooksCollector()
+
+    # добавляем книгу
+    collector.add_new_book(book_name)
+    # добавляем жанр книги
+    collector.set_book_genre(book_name, genre)
+    # создаем переменную book_genre, в которую выводится возвращаемое значение get_book_genre
+    book_genre = collector.get_book_genre(book_name)
+    assert book_name, genre in book_genre
+
+
+@pytest.mark.parametrize('book_name, genre', [
+    ('Lucky Jim', 'Комедии'),
+    ('The Lord of the Rings', 'Фантастика'),
+    ('Prostokvashino', 'Мультфильмы')
+])
+def test_get_books_genre(book_name, genre):
+    # создаем экземпляр (объект) класса BooksCollector
+    collector = BooksCollector()
+
+    # добавляем книгу
+    collector.add_new_book(book_name)
+    # добавляем жанр книги
+    collector.set_book_genre(book_name, genre)
+    # создаем переменную books_genre, в которую выводится возвращаемое значение get_books_genre
+    books_genre = collector.get_books_genre()
+    assert book_name, genre in books_genre
