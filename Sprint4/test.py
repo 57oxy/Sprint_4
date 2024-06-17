@@ -182,6 +182,10 @@ def test_delete_book_from_favorites(book_name, genre):
     # создаем экземпляр (объект) класса BooksCollector
     collector = BooksCollector()
 
+    # добавляем книгу
+    collector.add_new_book(book_name)
+    # добавляем жанр книги
+    collector.set_book_genre(book_name, genre)
     # добавляем книгу в список favorites
     collector.add_book_in_favorites(book_name)
     # удаляем книгу из списка favorites
@@ -239,7 +243,7 @@ def test_get_book_genre(book_name, genre):
     collector.set_book_genre(book_name, genre)
     # создаем переменную book_genre, в которую выводится возвращаемое значение get_book_genre
     book_genre = collector.get_book_genre(book_name)
-    assert book_name, genre in book_genre
+    assert genre in book_genre
 
 
 @pytest.mark.parametrize('book_name, genre', [
